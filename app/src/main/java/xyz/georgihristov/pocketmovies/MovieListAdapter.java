@@ -1,12 +1,14 @@
 package xyz.georgihristov.pocketmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +41,7 @@ public class MovieListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
         if (convertView == null){
@@ -57,14 +59,22 @@ public class MovieListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Result movie = movies.get(position);
+        final Result movie = movies.get(position);
         viewHolder.movieName.setText(movie.getTitle());
         viewHolder.movieOverview.setText(movie.getOverview());
-        viewHolder.movieScore.setText(String.valueOf(movie.getVoteAverage()));
+        viewHolder.movieScore.setText(String.valueOf(movie.getVoteAverage()));        
 
 
-        final String POSTER_PATH = "https://image.tmdb.org/t/p/w500";
-        Picasso.with(context).load(POSTER_PATH + movie.getPosterPath()).into(viewHolder.moviePoster);
+        final String POSTER_PATH = Api.POSTER_PATH+movie.getPosterPath();
+        Picasso.with(context).load(POSTER_PATH).into(viewHolder.moviePoster);
+        viewHolder.moviePoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FullScreenImage.class);
+                intent.putExtra("IMAGE_",POSTER_PATH);
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
