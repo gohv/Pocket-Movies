@@ -1,13 +1,13 @@
 package xyz.georgihristov.pocketmovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,11 +16,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MovieDetails extends AppCompatActivity{
 
 
     private ActorsAdapter adapter;
+    private int id;
+    private ImageView trailerImage;
+    private String movieTrailerKey;
+
 
 
     @Override
@@ -31,19 +36,30 @@ public class MovieDetails extends AppCompatActivity{
         TextView movieNameTextView = (TextView) findViewById(R.id.movieTitle);
         ImageView moviePoster = (ImageView) findViewById(R.id.mainPosterImageVIew);
         RecyclerView actorsList = (RecyclerView) findViewById(R.id.actorsView);
+        trailerImage = (ImageView) findViewById(R.id.trailerImage);
 
 
 
         Intent intent = getIntent();
 
-        int id = intent.getIntExtra("MOVIE_ID",0);
+        id = intent.getIntExtra("MOVIE_ID",0);
         String title = intent.getStringExtra("MOVIE_NAME");
         final String poster = intent.getStringExtra("MOVIE_POSTER");
         final String POSTER_PATH = Api.BACKDROP_PATH+poster;
         movieNameTextView.setText(title);
         Picasso.with(this).load(POSTER_PATH).into(moviePoster);
 
-        new ActorsExecutor().execute(String.format(Api.GET_CAST,id));
+        new ActorsExecutor().execute(String.format(Api.GET_CAST, id));
+        try {
+            movieTrailerKey = new VideoExecutor()
+                    .execute(String.format(Api.GET_TRAILERS+Api.API_KEY, id))
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        final String thumbNail = String.format(Api.YOUTUBE_THUMBNAIL_URL,movieTrailerKey);
+            Picasso.with(this).load(thumbNail).into(trailerImage);
 
         adapter = new ActorsAdapter(MovieDetails.this, new ArrayList<Cast>());
         actorsList.setAdapter(adapter);
@@ -51,13 +67,22 @@ public class MovieDetails extends AppCompatActivity{
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         actorsList.setLayoutManager(layoutManager);
 
+
+
+
         moviePoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MovieDetails.this, FullScreenImage.class);
-
                 intent.putExtra("IMAGE_",POSTER_PATH);
                 startActivity(intent);
+            }
+        });
+        trailerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String youTubeTrailer = String.format(Api.YOUTUBE_VIDEO_URL,movieTrailerKey);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youTubeTrailer)));
             }
         });
     }
@@ -70,11 +95,6 @@ public class MovieDetails extends AppCompatActivity{
             try {
                 Actor actorResults = downloader.actorsResults(apiToGet);
                 publishProgress(actorResults.getCast());
-                for (Cast ac : actorResults.getCast()){
-                    Log.d("`",ac.getName());
-                }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -89,12 +109,25 @@ public class MovieDetails extends AppCompatActivity{
         }
     }
 
-    private class VideoExecutor extends AsyncTask<Void,Void,Void>{
-
+    private class VideoExecutor extends AsyncTask<String,List<VideoResult>,String>{
+        Downloader downloader = new Downloader();
         @Override
-        protected Void doInBackground(Void... params) {
-            //TODO: ADD TRAILER
-            return null;
+        protected String doInBackground(String... params) {
+            String apiToGet = params[0];
+            String stringToReturn = "";
+            try {
+                Video videoResult = downloader.videoResults(apiToGet);
+                publishProgress(videoResult.getResults());
+              for (VideoResult v : videoResult.getResults()){
+                  String videoId = v.getKey();
+                  stringToReturn = videoId;
+              }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return stringToReturn;
         }
     }
 

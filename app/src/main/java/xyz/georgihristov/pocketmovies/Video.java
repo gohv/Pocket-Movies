@@ -11,7 +11,7 @@ public class Video {
     private Integer id;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<VideoResult> results = null;
 
     public Integer getId() {
         return id;
@@ -21,11 +21,11 @@ public class Video {
         this.id = id;
     }
 
-    public List<Result> getResults() {
+    public List<VideoResult> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<VideoResult> results) {
         this.results = results;
     }
 
