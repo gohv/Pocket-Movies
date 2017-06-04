@@ -1,7 +1,7 @@
 package xyz.georgihristov.pocketmovies;
 
 
-public class Api {
+class Api {
     public static final String API_KEY = "1cf817d06bb857235dae21078ad0499a";
     public static final String GET_POPULAR_MOVIES = "http://api.themoviedb.org/3/discover/movie?language=en&sort_by=popularity.desc&api_key=";
     public static final String GET_NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + API_KEY + "&language=en-US&page=1";

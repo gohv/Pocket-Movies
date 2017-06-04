@@ -1,9 +1,11 @@
 package xyz.georgihristov.pocketmovies;
-import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+import java.util.List;
+
+class Result {
 
     @SerializedName("poster_path")
     @Expose

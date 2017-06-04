@@ -8,17 +8,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 
-public class MovieListAdapter extends BaseAdapter {
+class MovieListAdapter extends BaseAdapter {
 
-    private Context context;
-    public List<Result> movies;
+    private final Context context;
+    public final List<Result> movies;
 
     public MovieListAdapter(Context context, List<Result> movies) {
         this.context = context;
@@ -44,7 +43,7 @@ public class MovieListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
-        if (convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.movies_list_items, null);
             viewHolder = new ViewHolder();
 
@@ -55,23 +54,23 @@ public class MovieListAdapter extends BaseAdapter {
 
             convertView.setTag(viewHolder);
 
-        }else {
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
         final Result movie = movies.get(position);
         viewHolder.movieName.setText(movie.getTitle());
         viewHolder.movieOverview.setText(movie.getOverview());
-        viewHolder.movieScore.setText(String.valueOf(movie.getVoteAverage()));        
+        viewHolder.movieScore.setText(String.valueOf(movie.getVoteAverage()));
 
 
-        final String POSTER_PATH = Api.POSTER_PATH+movie.getPosterPath();
+        final String POSTER_PATH = Api.POSTER_PATH + movie.getPosterPath();
         Picasso.with(context).load(POSTER_PATH).into(viewHolder.moviePoster);
         viewHolder.moviePoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FullScreenImage.class);
-                intent.putExtra("IMAGE_",POSTER_PATH);
+                intent.putExtra("IMAGE_", POSTER_PATH);
                 context.startActivity(intent);
             }
         });
@@ -79,7 +78,7 @@ public class MovieListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         ImageView moviePoster; //public by default
         TextView movieName;
         TextView movieOverview;

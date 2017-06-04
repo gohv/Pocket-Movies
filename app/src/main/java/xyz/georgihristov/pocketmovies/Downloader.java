@@ -12,10 +12,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Downloader{
+class Downloader {
 
-    private OkHttpClient client;
-    private Gson gson;
+    private final OkHttpClient client;
+    private final Gson gson;
 
 
     public Downloader() {
@@ -25,8 +25,7 @@ public class Downloader{
     }
 
 
-
-    public Movie movieResults(String api) throws Exception{
+    public Movie movieResults(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -35,10 +34,10 @@ public class Downloader{
         String json = response.body().string();
         Log.d("JASON", "RESPONSE " + json);
 
-        return gson.fromJson(json,Movie.class);
+        return gson.fromJson(json, Movie.class);
     }
 
-    public Actor actorsResults(String api) throws Exception{
+    public Actor actorsResults(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -47,10 +46,10 @@ public class Downloader{
         String json = response.body().string();
         Log.d("JASON", "RESPONSE " + json);
 
-        return gson.fromJson(json,Actor.class);
+        return gson.fromJson(json, Actor.class);
     }
 
-    public Video videoResults(String api) throws Exception{
+    public Video videoResults(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -59,7 +58,7 @@ public class Downloader{
         String json = response.body().string();
         Log.d("JASON", "RESPONSE " + json);
 
-        return gson.fromJson(json,Video.class);
+        return gson.fromJson(json, Video.class);
     }
 
 

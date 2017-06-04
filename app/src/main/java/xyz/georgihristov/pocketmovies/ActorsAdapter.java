@@ -12,11 +12,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsViewHolder>{
-    public List<Cast> castList;
-    private Context context;
+import es.dmoral.toasty.Toasty;
 
-
+public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsViewHolder> {
+    public final List<Cast> castList;
+    private final Context context;
 
 
     public ActorsAdapter(Context context, List<Cast> castList) {
@@ -29,14 +29,13 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
 
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.actors_list_item, parent, false);
-        ActorsViewHolder viewHolder = new ActorsViewHolder(view);
 
-        return viewHolder;
+        return new ActorsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ActorsViewHolder holder, int position) {
-            holder.bindActor(castList.get(position));
+        holder.bindActor(castList.get(position));
 
     }
 
@@ -46,13 +45,13 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
     }
 
 
-    class ActorsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ActorsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView imageView1;
+        final ImageView imageView1;
 
         private Cast actor;
 
-        public ActorsViewHolder(View itemView){
+        public ActorsViewHolder(View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
@@ -61,15 +60,16 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
 
 
         }
-        public void bindActor(Cast actor){
+
+        public void bindActor(Cast actor) {
             this.actor = actor;
-            Picasso.with(context).load(Api.GET_CAST_PICTURE+actor.getProfilePath()).into(imageView1);
+            Picasso.with(context).load(Api.GET_CAST_PICTURE + actor.getProfilePath()).into(imageView1);
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, actor.getName() +"\n" + "In the Role of: "
-                    +actor.getCharacter(), Toast.LENGTH_SHORT).show();
+            Toasty.info(context, actor.getName() + "\n" + "In the Role of: "
+                    + actor.getCharacter(), Toast.LENGTH_SHORT, true).show();
         }
 
 

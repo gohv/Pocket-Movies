@@ -33,4 +33,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.github.GrenderG:Toasty:1.2.5'
 }

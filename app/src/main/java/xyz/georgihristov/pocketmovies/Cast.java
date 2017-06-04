@@ -3,7 +3,7 @@ package xyz.georgihristov.pocketmovies;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Cast {
+class Cast {
 
     @SerializedName("cast_id")
     @Expose
