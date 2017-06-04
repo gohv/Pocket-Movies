@@ -107,7 +107,6 @@ public class MovieDetails extends AppCompatActivity {
 
     private class VideoExecutor extends AsyncTask<String, List<VideoResult>, String> {
         final Downloader downloader = new Downloader();
-
         @Override
         protected String doInBackground(String... params) {
             String apiToGet = params[0];
@@ -118,11 +117,9 @@ public class MovieDetails extends AppCompatActivity {
                 for (VideoResult v : videoResult.getResults()) {
                     stringToReturn = v.getKey();
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return stringToReturn;
         }
     }
