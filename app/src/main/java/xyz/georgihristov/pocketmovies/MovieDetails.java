@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +45,8 @@ public class MovieDetails extends AppCompatActivity {
         final String POSTER_PATH = Api.BACKDROP_PATH + poster;
         movieNameTextView.setText(title);
         Picasso.with(this).load(POSTER_PATH).into(moviePoster);
+
+        new ReviewExecutor().execute(Api.GET_REVIEWS+Api.API_KEY);
 
         new ActorsExecutor().execute(String.format(Api.GET_CAST, id));
         try {
@@ -121,6 +124,26 @@ public class MovieDetails extends AppCompatActivity {
                 e.printStackTrace();
             }
             return stringToReturn;
+        }
+    }
+    private class ReviewExecutor extends AsyncTask<String,List<Review>,String>{
+        Downloader downloader = new Downloader();
+        @Override
+        protected String doInBackground(String... params) {
+            String apiToGet = params[0];
+            String stringToReturn = "";
+
+            try {
+                ReviewResult reviewResult = downloader.reviewResult(apiToGet);
+                for (Review r : reviewResult.getResults()){
+                    Log.d("REVIEW`",r.getAuthor() + " " + r.getContent());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
         }
     }
 
