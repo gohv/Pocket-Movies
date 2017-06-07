@@ -15,6 +15,7 @@ class Api {
     static final String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1$s/0.jpg";
     public static final String GET_CAST = " https://api.themoviedb.org/3/movie/%s/credits?api_key=" + API_KEY;
     public static final String GET_CAST_PICTURE = "https://image.tmdb.org/t/p/w138_and_h175_bestv2";
+    public static final String GET_PERSON = " https://api.themoviedb.org/3/person/%s?api_key=" + API_KEY+ "&language=en-US";
 
 
     private Api() {

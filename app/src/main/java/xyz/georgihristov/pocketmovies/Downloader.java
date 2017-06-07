@@ -18,14 +18,14 @@ class Downloader {
     private final Gson gson;
 
 
-    public Downloader() {
+    Downloader() {
 
         gson = new GsonBuilder().create();
         client = new OkHttpClient();
     }
 
 
-    public Movie movieResults(String api) throws Exception {
+    Movie movieResults(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -37,7 +37,7 @@ class Downloader {
         return gson.fromJson(json, Movie.class);
     }
 
-    public Actor actorsResults(String api) throws Exception {
+    Actor actorsResults(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -49,7 +49,7 @@ class Downloader {
         return gson.fromJson(json, Actor.class);
     }
 
-    public Video videoResults(String api) throws Exception {
+    Video videoResults(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -62,7 +62,7 @@ class Downloader {
     }
 
 
-    public ReviewResult reviewResult (String api) throws Exception {
+    ReviewResult reviewResult(String api) throws Exception {
         Request request = new Request.Builder()
                 .url(api)
                 .build();
@@ -72,6 +72,18 @@ class Downloader {
         Log.d("JASON", "RESPONSE " + json);
 
         return gson.fromJson(json, ReviewResult.class);
+    }
+
+    Person personResult(String api) throws Exception {
+        Request request = new Request.Builder()
+                .url(api)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Something happened \n" + response);
+        String json = response.body().string();
+        Log.d("JASON", "RESPONSE " + json);
+
+        return gson.fromJson(json, Person.class);
     }
 
 

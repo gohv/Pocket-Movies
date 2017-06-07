@@ -31,7 +31,12 @@ public class MovieDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
+        View v =  getWindow().getDecorView().getRootView();
+
+
+
         TextView movieNameTextView = (TextView) findViewById(R.id.movieTitle);
+        TextView reviewTextView = (TextView) findViewById(R.id.reviewTextView);
         ImageView moviePoster = (ImageView) findViewById(R.id.mainPosterImageVIew);
         RecyclerView actorsList = (RecyclerView) findViewById(R.id.actorsView);
         ImageView trailerImage = (ImageView) findViewById(R.id.trailerImage);
@@ -39,20 +44,24 @@ public class MovieDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        int id = intent.getIntExtra("MOVIE_ID", 0);
+        int movieId = intent.getIntExtra("MOVIE_ID", 0);
         String title = intent.getStringExtra("MOVIE_NAME");
         final String poster = intent.getStringExtra("MOVIE_POSTER");
         final String POSTER_PATH = Api.BACKDROP_PATH + poster;
         movieNameTextView.setText(title);
         Picasso.with(this).load(POSTER_PATH).into(moviePoster);
 
-        new ReviewExecutor().execute(Api.GET_REVIEWS+Api.API_KEY);
-
-        new ActorsExecutor().execute(String.format(Api.GET_CAST, id));
+        new ActorsExecutor().execute(String.format(Api.GET_CAST, movieId));
         try {
             movieTrailerKey = new VideoExecutor()
-                    .execute(String.format(Api.GET_TRAILERS + Api.API_KEY, id))
+                    .execute(String.format(Api.GET_TRAILERS + Api.API_KEY, movieId))
                     .get();
+            String review = new ReviewExecutor().execute(String.format(Api.GET_REVIEWS+Api.API_KEY,movieId)).get();
+            if(review.length() < 3){
+                reviewTextView.setText("No Reviews Available");
+            }else {
+                reviewTextView.setText(review);
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -60,7 +69,8 @@ public class MovieDetails extends AppCompatActivity {
         final String thumbNail = String.format(Api.YOUTUBE_THUMBNAIL_URL, movieTrailerKey);
         Picasso.with(this).load(thumbNail).resize(1000, 0).into(trailerImage);
 
-        adapter = new ActorsAdapter(MovieDetails.this, new ArrayList<Cast>());
+        adapter = new ActorsAdapter(MovieDetails.this,v, new ArrayList<Cast>());
+
         actorsList.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -82,6 +92,7 @@ public class MovieDetails extends AppCompatActivity {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youTubeTrailer)));
             }
         });
+
     }
 
     private class ActorsExecutor extends AsyncTask<String, List<Cast>, Void> {
@@ -136,16 +147,19 @@ public class MovieDetails extends AppCompatActivity {
             try {
                 ReviewResult reviewResult = downloader.reviewResult(apiToGet);
                 for (Review r : reviewResult.getResults()){
-                    Log.d("REVIEW`",r.getAuthor() + " " + r.getContent());
+                    stringToReturn = "Author: " + r.getAuthor() + "\n " + r.getContent();
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
 
-            return null;
+            return stringToReturn;
         }
     }
+
+
 
     @Override
     public void onBackPressed() {
