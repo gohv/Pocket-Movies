@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Shortbread.create(this);
 
 
         movieList = (RecyclerView) findViewById(R.id.movieList);
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
         movieList.setLayoutManager(new GridLayoutManager(this, 2));
-        Shortbread.create(this);
+
         setupDrawer();
         addDrawerItems();
     }
