@@ -5,4 +5,5 @@
     <string name="drawer_close">drawer_close</string>
     <string name="movie_categories">Movie Categories</string>
     <string name="long_review_placeholder">I\'d just like to thank Patty Jenkins for making a DCIThoughtSheWasWithUniverse movie that wasn\'t fucking garbage. If I\'m being completely honest, the two people I went to the cinema to watch Wonder Woman with and I did spend the next two hours after coming out of our screening discussing the various problems with the movie, but we also all agreed on one thing: We still loved it. Maybe it\'s just the rose-coloured glasses of comparison, but I had an excellent time with Wonder Woman, and I\'m excited to go back to the cinema and watch it, at least one more time. It\'s the first time I\'v... read the rest.</string>
+    <string name="empty_text" />
 </resources>

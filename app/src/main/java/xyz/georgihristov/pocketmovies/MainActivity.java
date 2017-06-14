@@ -1,6 +1,9 @@
 package xyz.georgihristov.pocketmovies;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +37,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Shortbread.create(this);
 
-
+        TextView noDataTextView = (TextView) findViewById(R.id.noData);
         movieList = (RecyclerView) findViewById(R.id.movieList);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerList = (ListView) findViewById(R.id.drawerList);
 
-        loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
-        movieList.setLayoutManager(new GridLayoutManager(this, 2));
+        if (!isNetworkAvailable()){
 
-        setupDrawer();
-        addDrawerItems();
+            movieList.setVisibility(View.INVISIBLE);
+            noDataTextView.setVisibility(View.VISIBLE);
+            noDataTextView.setText("No Internet Connection\n This application requires internet to function");
+        }else {
+
+
+            loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
+            movieList.setLayoutManager(new GridLayoutManager(this, 2));
+
+            setupDrawer();
+            addDrawerItems();
+        }
     }
 
     private class Executor extends AsyncTask<String, List<Result>, Void> {
@@ -145,5 +158,22 @@ public class MainActivity extends AppCompatActivity {
     @Shortcut(id = "popular", icon = R.drawable.ic_launcher, shortLabel = "Popular")
     public void popularMovies(){
         loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
+    }
+
+    private boolean isNetworkAvailable() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 }
