@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ListView drawerList;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
             movieList.setVisibility(View.INVISIBLE);
             noDataTextView.setVisibility(View.VISIBLE);
             noDataTextView.setText("No Internet Connection\n This application requires internet to function");
-        }else {
 
+        }else {
 
             loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
             movieList.setLayoutManager(new GridLayoutManager(this, 2));
-
             setupDrawer();
             addDrawerItems();
+            
         }
     }
 
@@ -161,19 +159,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isNetworkAvailable() {
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
+        boolean isWifiConnected = false;
+        boolean isMobileNetworkConnected = false;
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                 if (ni.isConnected())
-                    haveConnectedWifi = true;
+                    isWifiConnected = true;
             if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
                 if (ni.isConnected())
-                    haveConnectedMobile = true;
+                    isMobileNetworkConnected = true;
         }
-        return haveConnectedWifi || haveConnectedMobile;
+        return isWifiConnected || isMobileNetworkConnected;
     }
 }
