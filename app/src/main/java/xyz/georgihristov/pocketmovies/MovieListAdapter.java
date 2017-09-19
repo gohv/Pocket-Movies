@@ -16,8 +16,8 @@ import java.util.List;
 
 class MovieListAdapter extends BaseAdapter {
 
-    private final Context context;
     public final List<Result> movies;
+    private final Context context;
 
     public MovieListAdapter(Context context, List<Result> movies) {
         this.context = context;

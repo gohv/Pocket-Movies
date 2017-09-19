@@ -86,6 +86,20 @@ class Downloader {
         return gson.fromJson(json, Person.class);
     }
 
+    MoreMoviesForActor moreMoviesResult(String api) throws Exception {
+        Request request = new Request.Builder()
+                .url(api)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Something happened \n" + response);
+        String json = response.body().string();
+        Log.d("JASON", "RESPONSE " + json);
+
+        return gson.fromJson(json, MoreMoviesForActor.class);
+    }
+
+
+
 
 
 }

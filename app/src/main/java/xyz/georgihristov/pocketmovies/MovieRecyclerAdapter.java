@@ -15,8 +15,8 @@ import java.util.List;
 
 public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder> {
 
-    private final Context context;
     public final List<Result> movies;
+    private final Context context;
 
 
     public MovieRecyclerAdapter(Context context, List<Result> movies) {
@@ -64,7 +64,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
 
         }
 
-        public void bindMovie(Result movie){
+        public void bindMovie(Result movie) {
             this.movie = movie;
 
             movieName.setText(movie.getTitle());

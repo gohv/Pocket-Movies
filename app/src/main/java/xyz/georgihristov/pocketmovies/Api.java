@@ -11,11 +11,12 @@ class Api {
     public static final String GET_REVIEWS = "http://api.themoviedb.org/3/movie/%s/reviews?api_key=";
     public static final String POSTER_PATH = "http://image.tmdb.org/t/p/w500";
     public static final String BACKDROP_PATH = "http://image.tmdb.org/t/p/w780";
-    static final String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1$s";
-    static final String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1$s/0.jpg";
     public static final String GET_CAST = " https://api.themoviedb.org/3/movie/%s/credits?api_key=" + API_KEY;
     public static final String GET_CAST_PICTURE = "https://image.tmdb.org/t/p/w138_and_h175_bestv2";
-    public static final String GET_PERSON = " https://api.themoviedb.org/3/person/%s?api_key=" + API_KEY+ "&language=en-US";
+    public static final String GET_PERSON = " https://api.themoviedb.org/3/person/%s?api_key=" + API_KEY + "&language=en-US";
+    public static final String GET_MORE_MOVIES = "https://api.themoviedb.org/3/person/%s/movie_credits?api_key=" + API_KEY + "&language=en-US";
+    static final String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1$s";
+    static final String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1$s/0.jpg";
 
 
     private Api() {

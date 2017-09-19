@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,8 +30,7 @@ public class MovieDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
-        View v =  getWindow().getDecorView().getRootView();
-
+        View v = getWindow().getDecorView().getRootView();
 
 
         TextView movieNameTextView = (TextView) findViewById(R.id.movieTitle);
@@ -56,10 +54,10 @@ public class MovieDetails extends AppCompatActivity {
             movieTrailerKey = new VideoExecutor()
                     .execute(String.format(Api.GET_TRAILERS + Api.API_KEY, movieId))
                     .get();
-            String review = new ReviewExecutor().execute(String.format(Api.GET_REVIEWS+Api.API_KEY,movieId)).get();
-            if(review.length() < 3){
+            String review = new ReviewExecutor().execute(String.format(Api.GET_REVIEWS + Api.API_KEY, movieId)).get();
+            if (review.length() < 3) {
                 reviewTextView.setText("No Reviews Available");
-            }else {
+            } else {
                 reviewTextView.setText(review);
             }
         } catch (InterruptedException | ExecutionException e) {
@@ -69,7 +67,7 @@ public class MovieDetails extends AppCompatActivity {
         final String thumbNail = String.format(Api.YOUTUBE_THUMBNAIL_URL, movieTrailerKey);
         Picasso.with(this).load(thumbNail).resize(1000, 0).into(trailerImage);
 
-        adapter = new ActorsAdapter(MovieDetails.this,v, new ArrayList<Cast>());
+        adapter = new ActorsAdapter(MovieDetails.this, v, new ArrayList<Cast>());
 
         actorsList.setAdapter(adapter);
 
@@ -93,6 +91,12 @@ public class MovieDetails extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private class ActorsExecutor extends AsyncTask<String, List<Cast>, Void> {
@@ -121,6 +125,7 @@ public class MovieDetails extends AppCompatActivity {
 
     private class VideoExecutor extends AsyncTask<String, List<VideoResult>, String> {
         final Downloader downloader = new Downloader();
+
         @Override
         protected String doInBackground(String... params) {
             String apiToGet = params[0];
@@ -137,8 +142,10 @@ public class MovieDetails extends AppCompatActivity {
             return stringToReturn;
         }
     }
-    private class ReviewExecutor extends AsyncTask<String,List<Review>,String>{
+
+    private class ReviewExecutor extends AsyncTask<String, List<Review>, String> {
         Downloader downloader = new Downloader();
+
         @Override
         protected String doInBackground(String... params) {
             String apiToGet = params[0];
@@ -146,7 +153,7 @@ public class MovieDetails extends AppCompatActivity {
 
             try {
                 ReviewResult reviewResult = downloader.reviewResult(apiToGet);
-                for (Review r : reviewResult.getResults()){
+                for (Review r : reviewResult.getResults()) {
                     stringToReturn = "Author: " + r.getAuthor() + "\n " + r.getContent();
 
                 }
@@ -157,13 +164,5 @@ public class MovieDetails extends AppCompatActivity {
 
             return stringToReturn;
         }
-    }
-
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

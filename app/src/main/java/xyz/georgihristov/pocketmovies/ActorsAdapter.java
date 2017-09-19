@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
 
 
 public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsViewHolder> {
@@ -21,7 +19,7 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
     private final Context context;
     private View view;
 
-    public ActorsAdapter(Context context,View view, List<Cast> castList) {
+    public ActorsAdapter(Context context, View view, List<Cast> castList) {
         this.castList = castList;
         this.context = context;
         this.view = view;
@@ -47,6 +45,21 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
         return castList.size();
     }
 
+    private void createSnackBar(View v, final Cast actor) {
+        String displaySnack = actor.getName() + "\n" + "In the Role of: "
+                + actor.getCharacter();
+        Snackbar bar = Snackbar.make(v, displaySnack, Snackbar.LENGTH_LONG)
+                .setAction("Details", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, PersonDetails.class);
+                        intent.putExtra("PERSONID", actor.getId());
+                        context.startActivity(intent);
+                    }
+                });
+
+        bar.show();
+    }
 
     class ActorsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -72,27 +85,11 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
         @Override
         public void onClick(View v) {
 
-            createSnackBar(view,actor);
+            createSnackBar(view, actor);
 
         }
 
 
-    }
-
-    private void createSnackBar(View v, final Cast actor){
-        String displaySnack = actor.getName() + "\n" + "In the Role of: "
-                + actor.getCharacter();
-        Snackbar bar = Snackbar.make(v, displaySnack, Snackbar.LENGTH_LONG)
-                .setAction("Details", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                         Intent intent = new Intent(context,PersonDetails.class);
-            intent.putExtra("PERSONID",actor.getId());
-            context.startActivity(intent);
-                    }
-                });
-
-        bar.show();
     }
 
 }

@@ -40,45 +40,19 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerList = (ListView) findViewById(R.id.drawerList);
 
-        if (!isNetworkAvailable()){
+        if (!isNetworkAvailable()) {
 
             movieList.setVisibility(View.INVISIBLE);
             noDataTextView.setVisibility(View.VISIBLE);
             noDataTextView.setText("No Internet Connection\n This application requires internet to function");
 
-        }else {
+        } else {
 
             loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
             movieList.setLayoutManager(new GridLayoutManager(this, 2));
             setupDrawer();
             addDrawerItems();
-            
-        }
-    }
 
-    private class Executor extends AsyncTask<String, List<Result>, Void> {
-        final Downloader downloader = new Downloader();
-
-
-        @Override
-        protected Void doInBackground(String... params) {
-
-            String apiToGet = params[0];
-
-            try {
-                Movie movieResults = downloader.movieResults(apiToGet);
-                publishProgress(movieResults.getResults());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final void onProgressUpdate(List<Result>... values) {
-            adapter.movies.addAll(values[0]);
-            adapter.notifyDataSetChanged();
         }
     }
 
@@ -97,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(drawerToggle);
     }
-
 
     private void addDrawerItems() {
         final String[] goods = {"Now Playing", "High Rated", "Upcoming", "Popular"};
@@ -142,19 +115,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Shortcut(id = "high_rated", icon = R.drawable.ic_launcher, shortLabel = "High Rated")
-    public void highRatedMovies(){
+    public void highRatedMovies() {
         loadList(Api.GET_HIGHEST_RATED_MOVIES + Api.API_KEY);
     }
+
     @Shortcut(id = "now_playing", icon = R.drawable.ic_launcher, shortLabel = "Now Playing")
-    public void nowPlayingMovies(){
+    public void nowPlayingMovies() {
         loadList(Api.GET_NOW_PLAYING);
     }
+
     @Shortcut(id = "upcoming", icon = R.drawable.ic_launcher, shortLabel = "Upcoming")
-    public void upcomingMovies(){
+    public void upcomingMovies() {
         loadList(Api.GET_UPCOMING_MOVIES);
     }
+
     @Shortcut(id = "popular", icon = R.drawable.ic_launcher, shortLabel = "Popular")
-    public void popularMovies(){
+    public void popularMovies() {
         loadList(Api.GET_POPULAR_MOVIES + Api.API_KEY);
     }
 
@@ -173,5 +149,31 @@ public class MainActivity extends AppCompatActivity {
                     isMobileNetworkConnected = true;
         }
         return isWifiConnected || isMobileNetworkConnected;
+    }
+
+    private class Executor extends AsyncTask<String, List<Result>, Void> {
+        final Downloader downloader = new Downloader();
+
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            String apiToGet = params[0];
+
+            try {
+                Movie movieResults = downloader.movieResults(apiToGet);
+                publishProgress(movieResults.getResults());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final void onProgressUpdate(List<Result>... values) {
+            adapter.movies.addAll(values[0]);
+            adapter.notifyDataSetChanged();
+        }
     }
 }
