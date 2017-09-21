@@ -24,13 +24,15 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
     private TextView birthDateTextView;
     private TextView placeOfBirthTextView;
     private ImageView personImageView;
+    private Intent intent;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.person_details);
-        Intent intent = getIntent();
-        int id = intent.getIntExtra("PERSONID", 0);
+        intent = getIntent();
+        id = intent.getIntExtra("PERSONID", 0);
 
         personNameTextView = (TextView) findViewById(R.id.personName);
         personBio = (TextView) findViewById(R.id.personBio);
@@ -46,7 +48,10 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this,MainActivity.class);
+
+        intent = new Intent(this,MoreMoviesActivity.class);
+        intent.putExtra("PERSONID",id);
+        startActivity(intent);
 
       }
 
@@ -91,7 +96,6 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
     }
     private class Executor extends AsyncTask<String, List<Result>, Void> {
         final Downloader downloader = new Downloader();
-
         @Override
         protected Void doInBackground(String... params) {
             String apiToGet = params[0];

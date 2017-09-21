@@ -153,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
     private class Executor extends AsyncTask<String, List<Result>, Void> {
         final Downloader downloader = new Downloader();
-
-
         @Override
         protected Void doInBackground(String... params) {
 
@@ -168,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
-
         @SafeVarargs
         @Override
         protected final void onProgressUpdate(List<Result>... values) {
