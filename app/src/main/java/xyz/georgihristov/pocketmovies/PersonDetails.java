@@ -76,8 +76,18 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
             super.onProgressUpdate(values);
             Person person = values[0];
             String url = "https://image.tmdb.org/t/p/w640";
-            Picasso.with(PersonDetails.this).load(url + person.getProfilePath()).into(personImageView);
+            final String profilePic = url + person.getProfilePath();
+            Picasso.with(PersonDetails.this).load(profilePic).into(personImageView);
             personNameTextView.setText(person.getName());
+
+            personImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PersonDetails.this,FullScreenImage.class);
+                    intent.putExtra("IMAGE_",profilePic);
+                    startActivity(intent);
+                }
+            });
 
             String bio = person.getBiography();
             String birthDate = person.getBirthday();
