@@ -49,12 +49,11 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        intent = new Intent(this,MoreMoviesActivity.class);
-        intent.putExtra("PERSONID",id);
+        intent = new Intent(this, MoreMoviesActivity.class);
+        intent.putExtra("PERSONID", id);
         startActivity(intent);
 
-      }
-
+    }
     private class PersonExecutor extends AsyncTask<String, Person, Void> {
         final Downloader downloader = new Downloader();
 
@@ -79,16 +78,14 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
             final String profilePic = url + person.getProfilePath();
             Picasso.with(PersonDetails.this).load(profilePic).into(personImageView);
             personNameTextView.setText(person.getName());
-
             personImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(PersonDetails.this,FullScreenImage.class);
-                    intent.putExtra("IMAGE_",profilePic);
+                    Intent intent = new Intent(PersonDetails.this, FullScreenImage.class);
+                    intent.putExtra("IMAGE_", profilePic);
                     startActivity(intent);
                 }
             });
-
             String bio = person.getBiography();
             String birthDate = person.getBirthday();
             String placeOfBirth = person.getPlaceOfBirth();
@@ -101,29 +98,6 @@ public class PersonDetails extends AppCompatActivity implements View.OnClickList
                 personBio.setText(person.getBiography());
                 birthDateTextView.setText("Birth Date: " + person.getBirthday());
                 placeOfBirthTextView.setText("Place of Birth: " + person.getPlaceOfBirth());
-            }
-        }
-    }
-    private class Executor extends AsyncTask<String, List<Result>, Void> {
-        final Downloader downloader = new Downloader();
-        @Override
-        protected Void doInBackground(String... params) {
-            String apiToGet = params[0];
-            try {
-                MoreMoviesForActor movieResults = downloader.moreMoviesResult(apiToGet);
-                publishProgress(movieResults.getCast());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-        @SafeVarargs
-        @Override
-        protected final void onProgressUpdate(List<Result>... values) {
-            List<Result> results = new ArrayList<>();
-            results.addAll(values[0]);
-            for (Result s : results){
-                Log.d(TAG,s.getOriginalTitle());
             }
         }
     }

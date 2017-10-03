@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Shortbread.create(this);
 
+
         TextView noDataTextView = (TextView) findViewById(R.id.noData);
         movieList = (RecyclerView) findViewById(R.id.movieList);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class Executor extends AsyncTask<String, List<Result>, Void> {
         final Downloader downloader = new Downloader();
+
         @Override
         protected Void doInBackground(String... params) {
 
@@ -166,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
+
         @SafeVarargs
         @Override
         protected final void onProgressUpdate(List<Result>... values) {

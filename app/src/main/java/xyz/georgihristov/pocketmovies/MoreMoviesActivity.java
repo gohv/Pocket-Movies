@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,18 @@ public class MoreMoviesActivity extends AppCompatActivity {
     private RecyclerView movieList;
     private MovieRecyclerAdapter adapter;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         Intent intent = getIntent();
         int id = intent.getIntExtra("PERSONID", 0);
-        String apiToGet = String.format(Api.GET_MORE_MOVIES,id);
+        String apiToGet = String.format(Api.GET_MORE_MOVIES, id);
 
         movieList = (RecyclerView) findViewById(R.id.movieList);
         loadList(apiToGet);
@@ -32,10 +39,8 @@ public class MoreMoviesActivity extends AppCompatActivity {
 
 
 
-
-
-
     }
+
     private void loadList(String json) {
 
         adapter = new MovieRecyclerAdapter(MoreMoviesActivity.this, new ArrayList<Result>());
@@ -44,8 +49,10 @@ public class MoreMoviesActivity extends AppCompatActivity {
 
 
     }
+
     private class Executor extends AsyncTask<String, List<Result>, Void> {
         final Downloader downloader = new Downloader();
+
         @Override
         protected Void doInBackground(String... params) {
             String apiToGet = params[0];
@@ -57,13 +64,14 @@ public class MoreMoviesActivity extends AppCompatActivity {
             }
             return null;
         }
+
         @SafeVarargs
         @Override
         protected final void onProgressUpdate(List<Result>... values) {
             List<Result> results = new ArrayList<>();
             results.addAll(values[0]);
-            for (Result s : results){
-                Log.d(TAG,s.getOriginalTitle());
+            for (Result s : results) {
+                Log.d(TAG, s.getOriginalTitle());
             }
             adapter.movies.addAll(values[0]);
             adapter.notifyDataSetChanged();
