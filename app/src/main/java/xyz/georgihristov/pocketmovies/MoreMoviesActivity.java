@@ -21,6 +21,7 @@ public class MoreMoviesActivity extends AppCompatActivity {
     private MovieRecyclerAdapter adapter;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
